@@ -1,0 +1,205 @@
+{
+  "name": "Data Teste",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "f8f007d9-8d9e-4577-8db6-e78ab90029e4",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "79e3e301-101f-4219-bbe0-1d8a6f18f775",
+              "leftValue": "={{ $json.novaDataInicial }}",
+              "rightValue": "2024-07-01 07:00:00\t",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "ad186fdb-ded0-40c4-8e5b-2d5cfad5c636",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1420,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "addToDate",
+        "magnitude": "= {{ $json.dataInicial }}",
+        "timeUnit": "months",
+        "duration": 1,
+        "outputFieldName": "novaDataInicial",
+        "options": {
+          "includeInputFields": true
+        }
+      },
+      "id": "252d7f15-1e0d-452f-9e3d-dcd34a72417d",
+      "name": "novaDataInicial",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "addToDate",
+        "magnitude": "={{ $json.dataFinal }}",
+        "timeUnit": "months",
+        "duration": 1,
+        "outputFieldName": "novaDataFinal",
+        "options": {
+          "includeInputFields": true
+        }
+      },
+      "id": "088ba0eb-6090-4c53-8ec4-99748ae68ea7",
+      "name": "novaDataFinal",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"dataInicial\": \"{{ $('novaDataInicial').item.json.novaDataInicial }}\",\n  \"dataFinal\": \"{{ $('novaDataFinal').item.json.novaDataFinal }}\"\n}",
+        "options": {}
+      },
+      "id": "0ea81f4d-1229-4853-ba05-ff12662edf5f",
+      "name": "var2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1540,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"dataInicial\": \"2022-01-01 07:00:00\",\n  \"dataFinal\": \"2022-02-01 06:59:59\"\n}\n",
+        "options": {}
+      },
+      "id": "1a9cc43d-10c9-448e-9af4-fe4396926222",
+      "name": "var1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        840,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "var1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "var2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "novaDataInicial": {
+      "main": [
+        [
+          {
+            "node": "novaDataFinal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "novaDataFinal": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "var2": {
+      "main": [
+        [
+          {
+            "node": "novaDataInicial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "var1": {
+      "main": [
+        [
+          {
+            "node": "novaDataInicial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "91a1eac4-0748-4fa5-93b1-757802cdeeb8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e064fe0fd994b2c5e488c0d3645cae7693b03aa4f908565b855427d734cac1bc"
+  },
+  "id": "0aEjglt93WZ0Vceg",
+  "tags": []
+}
